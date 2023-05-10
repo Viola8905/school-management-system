@@ -1,11 +1,13 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router} from "react-router-dom";
+import Pages from "./router/Pages";
+
 
 function App() {
   return (
     <div className="App">
-      
-        inititial 
+      <Router>
+        <Pages />
+      </Router>
     </div>
   );
 }
