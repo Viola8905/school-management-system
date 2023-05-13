@@ -1,27 +1,5 @@
 import styled from "styled-components";
 
-import heroBackground from "../../assets/heroBackground.png";
-
-export const Wrapper = styled.section`
-  height: 100vh;
-  width: 100vw;
-`;
-export const HeroBackground = styled.div`
-  position: relative;
-  background: url(${heroBackground}) center/cover no-repeat;
-  height: 100%;
-`;
-
-export const Section = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 0 3px;
-  height: 100%;
-  width: 100%;
-  color: white;
-`;
 
 export const Title = styled.h1`
   font-size: 40px;
@@ -67,7 +45,7 @@ export const CoursesList = styled.div`
 `;
 
 export const Course = styled.div`
-  background-image: linear-gradient(blue, black);
+  background-image: linear-gradient(blue, grey);
   border-radius: 16px;
   padding-top: 10px;
   padding-left: 10px;
@@ -85,17 +63,3 @@ export const CourseType = styled.div`
 `;
 export const CourseImage = styled.div``;
 
-export const SeeAllButton = styled.div`
-  display: flex;
-  justify-content: center;
-  padding: 20px 0;
-  button {
-    a {
-      padding: 10px;
-      border-radius: 16px;
-      font-size: 20px;
-      background-color: blue;
-      color: white;
-    }
-  }
-`;

@@ -1,5 +1,6 @@
 import React from "react";
-import {} from "./StartPage.js";
+import { Link } from "react-router-dom";
+
 import courseBg from "../../assets/course-card-bg.png";
 import {
   Container,
@@ -20,31 +21,37 @@ import {
 const StartPage = () => {
   const courses = [
     {
+      id: "1",
       title: "Програмування",
       count: "1 курс",
       image: courseBg,
     },
     {
+      id: "2",
       title: "Програмування",
       count: "1 курс",
       image: courseBg,
     },
     {
+      id: "3",
       title: "Програмування",
       count: "1 курс",
       image: courseBg,
     },
     {
+      id: "4",
       title: "Програмування",
       count: "1 курс",
       image: courseBg,
     },
     {
+      id: "5",
       title: "Програмування",
       count: "1 курс",
       image: courseBg,
     },
     {
+      id: "6",
       title: "Програмування",
       count: "1 курс",
       image: courseBg,
@@ -80,7 +87,9 @@ const StartPage = () => {
           </CoursesList>
 
           <SeeAllButton>
-            <button>Більше</button>
+            <button>
+              <Link to="/all-courses">Більше</Link>
+            </button>
           </SeeAllButton>
         </Container>
       </CoursesSection>
