@@ -1,14 +1,7 @@
 import React from "react";
 
 import courseBg from "../../assets/course-card-bg.png";
-import { Nav, Container, Row, Col, Card } from "react-bootstrap";
-import {
-  Course,
-  CourseImage,
-  CourseTitle,
-  CourseType,
-  CoursesList,
-} from "./AllCoursesPage.styles";
+import { Nav, Container, Row, Col, Card, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 const AllCoursesPage = () => {
@@ -16,35 +9,32 @@ const AllCoursesPage = () => {
 
   const handleSelect = (selectedKey) => {
     setActiveKey(selectedKey);
-    // Perform filtering logic based on the selected key
-    // For example, you can update the state or trigger an API call
-    // to fetch filtered data based on the selected category
   };
+  const courses = [
+    {
+      id: "1",
+      title: "Course 1",
+      category: "Design",
+      description: "This is the first course.",
+      image: courseBg,
+    },
+    {
+      id: "2",
+      title: "Course 2",
+      category: "Programming",
+      description: "This is a programming course.",
+      image: courseBg,
+    },
+    {
+      id: "3",
+      title: "Course 3",
+      category: "Marketing",
+      description: "This is a marketing course.",
+      image: courseBg,
+    },
+  ];
+  const categories = [...new Set(courses.map((course) => course.category))];
   const renderCourseList = () => {
-    // You can replace this static data with dynamic data from an API or a state
-    const courses = [
-      {
-        id: "1",
-        title: "Course 1",
-        category: "All Courses",
-        description: "This is the first course.",
-        image: courseBg,
-      },
-      {
-        id: "2",
-        title: "Course 2",
-        category: "Programming",
-        description: "This is a programming course.",
-        image: courseBg,
-      },
-      {
-        id: "3",
-        title: "Course 3",
-        category: "Marketing",
-        description: "This is a marketing course.",
-        image: courseBg,
-      },
-    ];
     return courses
       .filter((course) => {
         if (activeKey === "/all-courses") {
@@ -55,18 +45,24 @@ const AllCoursesPage = () => {
       })
       .map((item, index) => (
         <Col key={index} sm={6} md={4} lg={3}>
-          <Course>
-            <div>
-              <Link to={`/courses/${item.id}`}>Check</Link>
-            </div>
-            <CourseTitle>{item.title}</CourseTitle>
-            <CourseType>{item.description}</CourseType>
-          </Course>
+          <Card className="mb-4 shadow-sm">
+            <Card.Img variant="top" src={item.image} />
+            <Card.Body>
+              <Card.Title>{item.title}</Card.Title>
+              <Card.Text>{item.category}</Card.Text>
+              <Link to={`/courses/${item.id}`}>
+                <Button variant="success">Переглянути</Button>
+              </Link>
+              <Link to={`/edit-course/${item.id}`}>
+                <Button variant="primary">Edit</Button>
+              </Link>
+            </Card.Body>
+          </Card>
         </Col>
       ));
   };
   return (
-    <Container>
+    <Container style={{ padding: "20px" }}>
       <Nav
         variant="pills"
         defaultActiveKey="/all-courses"
@@ -80,16 +76,15 @@ const AllCoursesPage = () => {
             All Courses
           </Nav.Link>
         </Nav.Item>
-        <Nav.Item>
-          <Nav.Link eventKey="Programming" active={activeKey === "Programming"}>
-            Programming
-          </Nav.Link>
-        </Nav.Item>
-        <Nav.Item>
-          <Nav.Link eventKey="Marketing" active={activeKey === "Marketing"}>
-            Marketing
-          </Nav.Link>
-        </Nav.Item>
+        {categories.map((item) => {
+          return (
+            <Nav.Item>
+              <Nav.Link eventKey={item} active={activeKey === item}>
+                {item}
+              </Nav.Link>
+            </Nav.Item>
+          );
+        })}
       </Nav>
       <Row className="mt-4">{renderCourseList()}</Row>
     </Container>

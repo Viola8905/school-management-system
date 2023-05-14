@@ -22,38 +22,23 @@ const StartPage = () => {
   const courses = [
     {
       id: "1",
-      title: "Програмування",
-      count: "1 курс",
+      title: "Course 1",
+      category: "Design",
+      description: "This is the first course.",
       image: courseBg,
     },
     {
       id: "2",
-      title: "Програмування",
-      count: "1 курс",
+      title: "Course 2",
+      category: "Programming",
+      description: "This is a programming course.",
       image: courseBg,
     },
     {
       id: "3",
-      title: "Програмування",
-      count: "1 курс",
-      image: courseBg,
-    },
-    {
-      id: "4",
-      title: "Програмування",
-      count: "1 курс",
-      image: courseBg,
-    },
-    {
-      id: "5",
-      title: "Програмування",
-      count: "1 курс",
-      image: courseBg,
-    },
-    {
-      id: "6",
-      title: "Програмування",
-      count: "1 курс",
+      title: "Course 3",
+      category: "Marketing",
+      description: "This is a marketing course.",
       image: courseBg,
     },
   ];
@@ -76,7 +61,7 @@ const StartPage = () => {
             {courses.map((item) => {
               return (
                 <Course>
-                  <CourseTitle>{item.title}</CourseTitle>
+                  <CourseTitle>{item.category}</CourseTitle>
                   <CourseType>{item.count}</CourseType>
                   <CourseImage>
                     <img src={item.image} />
@@ -88,7 +73,7 @@ const StartPage = () => {
 
           <SeeAllButton>
             <button>
-              <Link to="/all-courses">Більше</Link>
+              <Link to="/all-courses">Дивитися всі курси</Link>
             </button>
           </SeeAllButton>
         </Container>
