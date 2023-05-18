@@ -1,42 +1,35 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import courseBg from "../../assets/course-card-bg.png";
 import { Nav, Container, Row, Col, Card, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { getAllCoursesRequest } from "../../apiCalls/coursesRequests";
 
 const AllCoursesPage = () => {
   const [activeKey, setActiveKey] = React.useState("/all-courses");
+  const [courses, setCourses] = React.useState([]);
   const role = useSelector((state) => state.user.currentUser.role);
 
   const handleSelect = (selectedKey) => {
     setActiveKey(selectedKey);
   };
 
-  const courses = [
-    {
-      id: "1",
-      title: "Course 1",
-      category: "Design",
-      description: "This is the first course.",
-      image: courseBg,
-    },
-    {
-      id: "2",
-      title: "Course 2",
-      category: "Programming",
-      description: "This is a programming course.",
-      image: courseBg,
-    },
-    {
-      id: "3",
-      title: "Course 3",
-      category: "Marketing",
-      description: "This is a marketing course.",
-      image: courseBg,
-    },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getAllCoursesRequest();
+        setCourses(response);
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const categories = [...new Set(courses.map((course) => course.category))];
+
   const renderCourseList = () => {
     return courses
       .filter((course) => {
@@ -48,18 +41,20 @@ const AllCoursesPage = () => {
       })
       .map((item, index) => (
         <Col key={index} sm={6} md={4} lg={3}>
-          <Card className="mb-4 shadow-sm">
-            <Card.Img variant="top" src={item.image} />
+          <Card className="mb-4 mt-4 shadow-sm">
+            <Card.Img variant="top" src={courseBg} />
             <Card.Body>
               <Card.Title>{item.title}</Card.Title>
               <Card.Text>{item.category}</Card.Text>
-              <Link to={`/courses/${item.id}`}>
+              <Link to={`/courses/${item._id}`}>
                 <Button variant="success">Переглянути</Button>
               </Link>
               {role === "admin" && (
-                <Link to={`/edit-course/${item.id}`}>
-                  <Button variant="primary">Edit</Button>
-                </Link>
+                <div style={{ margin: "10px 0" }}>
+                  <Link to={`/edit-course/${item._id}`}>
+                    <Button variant="primary">Редагувати</Button>
+                  </Link>
+                </div>
               )}
             </Card.Body>
           </Card>

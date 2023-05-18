@@ -1,72 +1,62 @@
 import React, { useState, useEffect } from "react";
 import { Container, Form, Button } from "react-bootstrap";
 import { useParams } from "react-router-dom";
-import courseBg from "../../../assets/course-card-bg.png";
+import {
+  editCourseRequest,
+  getAllCoursesRequest,
+} from "../../../apiCalls/coursesRequests";
+import axios from "axios";
 
 const EditCoursePage = () => {
-  const [title, setTitle] = useState("");
-  const [category, setCategory] = useState("");
-  const [description, setDescription] = useState("");
-  const [image, setImage] = useState("");
-  const [previewImage, setPreviewImage] = useState(null);
+  const [course, setCourse] = useState({
+    title: "",
+    description: "",
+    lector: "",
+    category: "",
+    startDate: "",
+    endDate: "",
+		_id:""
+  });
+  const [lectors, setLectors] = useState([]);
 
-	const id = useParams().id;
-  const courses = [
-    {
-      id: "1",
-      title: "Course 1",
-      category: "All Courses",
-      description: "This is the first course.",
-      image: courseBg,
-    },
-    {
-      id: "2",
-      title: "Course 2",
-      category: "Programming",
-      description: "This is a programming course.",
-      image: courseBg,
-    },
-    {
-      id: "3",
-      title: "Course 3",
-      category: "Marketing",
-      description: "This is a marketing course.",
-      image: courseBg,
-    },
-  ];
-  const course = courses.find((item) => item.id === id);
-
-  const handleImageChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      let img = e.target.files[0];
-      setImage(img);
-      setPreviewImage(URL.createObjectURL(img));
-    }
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const course = {
-      id,
-      title,
-      category,
-      description,
-      image,
-    };
-    console.log(course);
-    
-  };
+  const courseId = useParams().id;
 
   useEffect(() => {
-		 const course = courses.find((item) => item.id === id);
-    // Fetch the course details from the API when the component mounts.
-    // This is not implemented in this example.
-    setTitle(course.title);
-    setCategory(course.category);
-    setDescription(course.description);
-    setImage(course.image);
-    setPreviewImage(course.image);
-  }, [id]);
+    axios
+      .get("http://localhost:3001/api/users/getAllTeachers", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => setLectors(res.data))
+      .catch((err) => alert(err));
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getAllCoursesRequest();
+        setCourse(response.find((item) => item._id === courseId));
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleChange = (e) => {
+    setCourse({
+      ...course,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const editCourse = editCourseRequest(course);
+    await editCourse(course);
+  };
 
   return (
     <Container>
@@ -75,40 +65,71 @@ const EditCoursePage = () => {
           <Form.Label>Title</Form.Label>
           <Form.Control
             type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            name="title"
+            value={course.title}
+            onChange={handleChange}
           />
         </Form.Group>
-        <Form.Group>
-          <Form.Label>Category</Form.Label>
-          <Form.Control
-            type="text"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          />
-        </Form.Group>
+
         <Form.Group>
           <Form.Label>Description</Form.Label>
           <Form.Control
             type="text"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            name="description"
+            value={course.description}
+            onChange={handleChange}
           />
         </Form.Group>
+
         <Form.Group>
-          <Form.Label>Image</Form.Label>
-          <Form.Control type="file" onChange={handleImageChange} />
-          {previewImage && (
-            <img
-              src={previewImage}
-              alt="preview"
-              style={{ maxWidth: "200px", marginTop: "10px" }}
-            />
-          )}
+          <Form.Label>Lector</Form.Label>
+          <Form.Control
+            as="select"
+            name="lector"
+            value={course.lector}
+            onChange={handleChange}
+          >
+            <option value="">Please select...</option>
+            {lectors.map((lector) => (
+              <option key={lector._id} value={lector._id}>
+                {lector.name} {lector.surname}
+              </option>
+            ))}
+          </Form.Control>
         </Form.Group>
-        <Button variant="primary" type="submit">
-          Update
-        </Button>
+
+        <Form.Group>
+          <Form.Label>Category</Form.Label>
+          <Form.Control
+            type="text"
+            name="category"
+            value={course.category}
+            onChange={handleChange}
+          />
+        </Form.Group>
+
+        <Form.Group>
+          <Form.Label>Start Date</Form.Label>
+          <Form.Control
+            type="datetime-local"
+            name="startDate"
+            value={course.startDate}
+            onChange={handleChange}
+          />
+        </Form.Group>
+
+        <Form.Group>
+          <Form.Label>End Date</Form.Label>
+          <Form.Control
+            type="datetime-local"
+            name="endDate"
+            value={course.endDate}
+            onChange={handleChange}
+          />
+        </Form.Group>
+        <div style={{ padding: "20px 0" }}>
+          <Button type="submit">Редагувати курс</Button>
+        </div>
       </Form>
     </Container>
   );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
   AboutCourseS,
@@ -11,30 +11,24 @@ import {
   Wrapper,
 } from "./SingleCoursePage.styles";
 import { Button } from "react-bootstrap";
+import { getAllCoursesRequest } from "../../apiCalls/coursesRequests";
 
 const SingleCoursePage = () => {
   const courseId = useParams().id;
-  const courses = [
-    {
-      id: "1",
-      title: "Course 1",
-      category: "All Courses",
-      description: "This is the first course.",
-    },
-    {
-      id: "2",
-      title: "Course 2",
-      category: "Programming",
-      description: "This is a programming course.",
-    },
-    {
-      id: "3",
-      title: "Course 3",
-      category: "Marketing",
-      description: "This is a marketing course.",
-    },
-  ];
-  const course = courses.find((item) => item.id === courseId);
+  const [course, setCourse] = React.useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getAllCoursesRequest();
+        setCourse(response.find((item) => item._id === courseId));
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <div>
