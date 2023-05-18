@@ -12,7 +12,8 @@ import EditCoursePage from "../pages/AdminRightsPages/EditCoursePage/EditCourseP
 
 const Pages = () => {
   const isAuth = useSelector((state) => state.user.isAuth);
-  const role = useSelector((state) => state.user.currentUser.role_id);
+  const role = useSelector((state) => state.user.currentUser.role);
+
 
   function renderRotes(isAuth, role) {
     if (!isAuth) {
@@ -27,20 +28,28 @@ const Pages = () => {
           <Route exact path="/edit-course/:id" element={<EditCoursePage />} />
         </Route>
       );
-    } else if (isAuth && role === 200) {
+    } else if (isAuth && role === "admin") {
       return (
         <Route exact path="/" element={<Dashboard />}>
           <Route index element={<StartPage />} />
           <Route path="/all-courses" element={<AllCoursesPage />} />
           <Route path="/courses/:id" element={<SingleCoursePage />} />
+          <Route path="/login" element={<AuthPage />} />
+          <Route exact path="/registration" element={<AuthPage />} />
+          <Route exact path="/create-course" element={<CreateCoursePage />} />
+          <Route exact path="/edit-course/:id" element={<EditCoursePage />} />
         </Route>
       );
-    } else if (isAuth && role === 100) {
+    } else if (isAuth && role === "user") {
       return (
         <Route exact path="/" element={<Dashboard />}>
           <Route index element={<StartPage />} />
           <Route path="/all-courses" element={<AllCoursesPage />} />
           <Route path="/courses/:id" element={<SingleCoursePage />} />
+          <Route path="/login" element={<AuthPage />} />
+          <Route exact path="/registration" element={<AuthPage />} />
+          <Route exact path="/create-course" element={<CreateCoursePage />} />
+          <Route exact path="/edit-course/:id" element={<EditCoursePage />} />
         </Route>
       );
     }

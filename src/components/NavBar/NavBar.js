@@ -3,10 +3,15 @@ import { ContentData } from "./NavBar.data";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
+import { useDispatch, useSelector } from "react-redux";
 
 import { Link } from "react-router-dom";
+import { logout } from "../../reducers/userReducer";
 
 const NavBar = () => {
+  const isAuth = useSelector((state) => state.user.isAuth);
+  const role = useSelector((state) => state.user.currentUser.role);
+  const dispatch = useDispatch();
   const { menuLinks, logo } = ContentData;
 
   return (
@@ -33,9 +38,32 @@ const NavBar = () => {
                 </div>
               );
             })}
+            {role === "admin" && (
+              <div style={{ margin: "5px 20px" }}>
+                <Link to={`/create-course`} style={{ color: "black" }}>
+                  Створити курс
+                </Link>
+              </div>
+            )}
+            {isAuth ? (
+              <div
+                style={{ margin: "5px 20px" }}
+                onClick={() => {
+                  dispatch(logout());
+                }}
+              >
+                <Link to={`/`} style={{ color: "black" }}>
+                  Log out
+                </Link>
+              </div>
+            ) : (
+              <div style={{ margin: "5px 20px" }}>
+                <Link to={`/login`} style={{ color: "black" }}>
+                  Login
+                </Link>
+              </div>
+            )}
           </Nav>
-
-          
         </Navbar.Collapse>
       </Container>
     </Navbar>

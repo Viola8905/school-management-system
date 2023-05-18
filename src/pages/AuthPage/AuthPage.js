@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Button, Card, Container, Form, Row } from "react-bootstrap";
 import { NavLink, useLocation } from "react-router-dom";
-//import { login, registration } from "../../api/userRequests";
 import { useDispatch } from "react-redux";
 import axios from "axios";
+import { login, registration } from "../../apiCalls/userRequests";
 //import BackBtn from "../../components/backBtn/BackBtn";
 
 const AuthPage = () => {
@@ -12,7 +12,6 @@ const AuthPage = () => {
 
   const [first_name, setFirst_name] = useState("");
   const [middle_name, setMiddle_name] = useState("");
-  const [last_name, setLast_name] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
@@ -67,14 +66,6 @@ const AuthPage = () => {
                 />
                 <Form.Control
                   className="mt-2"
-                  placeholder="Прізвище"
-                  value={last_name}
-                  onChange={(e) => {
-                    setLast_name(e.target.value);
-                  }}
-                />
-                <Form.Control
-                  className="mt-2"
                   placeholder="Пошта"
                   value={email}
                   type="email"
@@ -121,7 +112,7 @@ const AuthPage = () => {
               >
                 <Button
                   variant="primary"
-                  //onClick={() => dispatch(login(email, password))}
+                  onClick={() => dispatch(login(email, password))}
                   style={{ marginTop: "20px" }}
                 >
                   <NavLink
@@ -140,15 +131,9 @@ const AuthPage = () => {
                   justifyContent: "center",
                   marginTop: "20px",
                 }}
-                // onClick={() =>
-                //   registration(
-                //     first_name,
-                //     middle_name,
-                //     last_name,
-                //     email,
-                //     password
-                //   )
-                // }
+                onClick={() =>
+                  registration(first_name, middle_name, email, password)
+                }
               >
                 <Button variant={"primary"}>
                   <NavLink

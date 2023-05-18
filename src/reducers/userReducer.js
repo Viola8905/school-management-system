@@ -41,7 +41,7 @@ export default function userReducer(state = defaultState, action) {
   }
 }
 
-export const setStudent = (student) => ({ type: SET_STUDENT, payload: student });
+export const setStudent = (user) => ({ type: SET_STUDENT, payload: user });
 export const setAdmin = (user) => ({ type: SET_ADMIN, payload: user });
 export const setLector = (user) => ({ type: SET_LECTOR, payload: user });
 export const logout = () => ({ type: LOGOUT });
