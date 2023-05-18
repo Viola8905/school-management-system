@@ -14,7 +14,6 @@ const Pages = () => {
   const isAuth = useSelector((state) => state.user.isAuth);
   const role = useSelector((state) => state.user.currentUser.role);
 
-
   function renderRotes(isAuth, role) {
     if (!isAuth) {
       return (
@@ -24,8 +23,6 @@ const Pages = () => {
           <Route path="/courses/:id" element={<SingleCoursePage />} />
           <Route path="/login" element={<AuthPage />} />
           <Route exact path="/registration" element={<AuthPage />} />
-          <Route exact path="/create-course" element={<CreateCoursePage />} />
-          <Route exact path="/edit-course/:id" element={<EditCoursePage />} />
         </Route>
       );
     } else if (isAuth && role === "admin") {
@@ -34,8 +31,6 @@ const Pages = () => {
           <Route index element={<StartPage />} />
           <Route path="/all-courses" element={<AllCoursesPage />} />
           <Route path="/courses/:id" element={<SingleCoursePage />} />
-          <Route path="/login" element={<AuthPage />} />
-          <Route exact path="/registration" element={<AuthPage />} />
           <Route exact path="/create-course" element={<CreateCoursePage />} />
           <Route exact path="/edit-course/:id" element={<EditCoursePage />} />
         </Route>
@@ -46,10 +41,6 @@ const Pages = () => {
           <Route index element={<StartPage />} />
           <Route path="/all-courses" element={<AllCoursesPage />} />
           <Route path="/courses/:id" element={<SingleCoursePage />} />
-          <Route path="/login" element={<AuthPage />} />
-          <Route exact path="/registration" element={<AuthPage />} />
-          <Route exact path="/create-course" element={<CreateCoursePage />} />
-          <Route exact path="/edit-course/:id" element={<EditCoursePage />} />
         </Route>
       );
     }

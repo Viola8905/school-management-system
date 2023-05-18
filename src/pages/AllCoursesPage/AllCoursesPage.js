@@ -3,13 +3,16 @@ import React from "react";
 import courseBg from "../../assets/course-card-bg.png";
 import { Nav, Container, Row, Col, Card, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const AllCoursesPage = () => {
   const [activeKey, setActiveKey] = React.useState("/all-courses");
+  const role = useSelector((state) => state.user.currentUser.role);
 
   const handleSelect = (selectedKey) => {
     setActiveKey(selectedKey);
   };
+
   const courses = [
     {
       id: "1",
@@ -53,9 +56,11 @@ const AllCoursesPage = () => {
               <Link to={`/courses/${item.id}`}>
                 <Button variant="success">Переглянути</Button>
               </Link>
-              <Link to={`/edit-course/${item.id}`}>
-                <Button variant="primary">Edit</Button>
-              </Link>
+              {role === "admin" && (
+                <Link to={`/edit-course/${item.id}`}>
+                  <Button variant="primary">Edit</Button>
+                </Link>
+              )}
             </Card.Body>
           </Card>
         </Col>

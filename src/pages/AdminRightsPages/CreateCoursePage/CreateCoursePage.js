@@ -1,33 +1,42 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Form, Button } from "react-bootstrap";
-
+import { createCourseRequest } from "../../../apiCalls/coursesRequests";
+import axios from "axios";
 
 const CreateCoursePage = () => {
-  const [title, setTitle] = useState("");
-  const [category, setCategory] = useState("");
-  const [description, setDescription] = useState("");
-  const [image, setImage] = useState("");
-  const [previewImage, setPreviewImage] = useState(null);
+  const [course, setCourse] = useState({
+    title: "",
+    description: "",
+    lector: "",
+    category: "",
+    startDate: "",
+    endDate: "",
+  });
 
-  const handleImageChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      let img = e.target.files[0];
-      setImage(img);
-      setPreviewImage(URL.createObjectURL(img));
-    }
+  const [lectors, setLectors] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/api/users/getAllTeachers", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => setLectors(res.data))
+      .catch((err) => alert(err));
+  }, []);
+
+  const handleChange = (e) => {
+    setCourse({
+      ...course,
+      [e.target.name]: e.target.value,
+    });
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const course = {
-      title,
-      category,
-      description,
-      image,
-    };
-    console.log(course);
-    // Here you would usually make an API request to save your new course.
-    // Redirect to home page after form submission.
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const createCourse = createCourseRequest(course);
+    await createCourse(course);
   };
 
   return (
@@ -35,42 +44,60 @@ const CreateCoursePage = () => {
       <Form onSubmit={handleSubmit}>
         <Form.Group>
           <Form.Label>Title</Form.Label>
-          <Form.Control
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
+          <Form.Control type="text" name="title" onChange={handleChange} />
         </Form.Group>
-        <Form.Group>
-          <Form.Label>Category</Form.Label>
-          <Form.Control
-            type="text"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          />
-        </Form.Group>
+
         <Form.Group>
           <Form.Label>Description</Form.Label>
           <Form.Control
             type="text"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            name="description"
+            onChange={handleChange}
           />
         </Form.Group>
+
         <Form.Group>
-          <Form.Label>Image</Form.Label>
-          <Form.Control type="file" onChange={handleImageChange} />
-          {previewImage && (
-            <img
-              src={previewImage}
-              alt="preview"
-              style={{ maxWidth: "200px", marginTop: "10px" }}
-            />
-          )}
+          <Form.Label>Lector</Form.Label>
+          <Form.Control
+            as="select"
+            name="lector"
+            value={course.lector}
+            onChange={handleChange}
+          >
+            <option value="">Please select...</option>
+            {lectors.map((lector) => (
+              <option key={lector._id} value={lector._id}>
+                {lector.name} {lector.surname}
+              </option>
+            ))}
+          </Form.Control>
         </Form.Group>
-        <Button variant="primary" type="submit">
-          Submit
-        </Button>
+
+        <Form.Group>
+          <Form.Label>Category</Form.Label>
+          <Form.Control type="text" name="category" onChange={handleChange} />
+        </Form.Group>
+
+        <Form.Group>
+          <Form.Label>Start Date</Form.Label>
+          <Form.Control
+            type="datetime-local"
+            name="startDate"
+            onChange={handleChange}
+          />
+        </Form.Group>
+
+        <Form.Group>
+          <Form.Label>End Date</Form.Label>
+          <Form.Control
+            type="datetime-local"
+            name="endDate"
+            onChange={handleChange}
+          />
+        </Form.Group>
+        <div style={{ padding: "20px 0" }}>
+          <Button type="submit">Створити курс</Button>
+        </div>
       </Form>
     </Container>
   );
