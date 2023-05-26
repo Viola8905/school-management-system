@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import courseBg from "../../assets/course-card-bg.png";
@@ -18,30 +18,25 @@ import {
   Title,
   Wrapper,
 } from "./StartPage.styles.js";
+import { getAllCoursesRequest } from "../../apiCalls/coursesRequests";
 const StartPage = () => {
-  const courses = [
-    {
-      id: "1",
-      title: "Course 1",
-      category: "Design",
-      description: "This is the first course.",
-      image: courseBg,
-    },
-    {
-      id: "2",
-      title: "Course 2",
-      category: "Programming",
-      description: "This is a programming course.",
-      image: courseBg,
-    },
-    {
-      id: "3",
-      title: "Course 3",
-      category: "Marketing",
-      description: "This is a marketing course.",
-      image: courseBg,
-    },
-  ];
+  const [categories, setCatgories] = React.useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getAllCoursesRequest();
+        const categories = [
+          ...new Set(response.map((course) => course.category)),
+        ];
+        setCatgories(categories);
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <>
       <Wrapper>
@@ -58,13 +53,13 @@ const StartPage = () => {
           <CoursesTitle>Освітні програми</CoursesTitle>
 
           <CoursesList>
-            {courses.map((item) => {
+            {categories.map((item) => {
               return (
                 <Course>
-                  <CourseTitle>{item.category}</CourseTitle>
+                  <CourseTitle>{item}</CourseTitle>
                   <CourseType>{item.count}</CourseType>
                   <CourseImage>
-                    <img src={item.image} />
+                    <img src={courseBg} />
                   </CourseImage>
                 </Course>
               );

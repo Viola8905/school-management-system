@@ -9,6 +9,9 @@ import SingleCoursePage from "../pages/SingleCoursePage/SingleCoursePage";
 import AuthPage from "../pages/AuthPage/AuthPage";
 import CreateCoursePage from "../pages/AdminRightsPages/CreateCoursePage/CreateCoursePage";
 import EditCoursePage from "../pages/AdminRightsPages/EditCoursePage/EditCoursePage";
+import AllUsersPage from "../pages/AdminRightsPages/AllUsersPage/AllUsersPage";
+import MyCoursesPage from "../pages/MyCoursesPage/MyCoursesPage";
+import CoursesApplicationsPage from "../pages/AdminRightsPages/CoursesApplicationsPage/CoursesApplicationsPage";
 
 const Pages = () => {
   const isAuth = useSelector((state) => state.user.isAuth);
@@ -33,6 +36,12 @@ const Pages = () => {
           <Route path="/courses/:id" element={<SingleCoursePage />} />
           <Route exact path="/create-course" element={<CreateCoursePage />} />
           <Route exact path="/edit-course/:id" element={<EditCoursePage />} />
+          <Route exact path="/users" element={<AllUsersPage />} />
+          <Route
+            exact
+            path="/courses-applications"
+            element={<CoursesApplicationsPage />}
+          />
         </Route>
       );
     } else if (isAuth && role === "user") {
@@ -41,6 +50,7 @@ const Pages = () => {
           <Route index element={<StartPage />} />
           <Route path="/all-courses" element={<AllCoursesPage />} />
           <Route path="/courses/:id" element={<SingleCoursePage />} />
+          <Route path="/my-courses" element={<MyCoursesPage />} />
         </Route>
       );
     }

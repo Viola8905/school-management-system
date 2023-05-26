@@ -54,9 +54,36 @@ export const login = (email, password) => {
       } else {
         dispatch(setAdmin(decodedToken));
       }
+			return response.data.token
     } catch (e) {
       localStorage.removeItem("token");
       alert(e.response.data.message);
     }
   };
+};
+
+export const getAllUsersRequest = async () => {
+  try {
+    const response = await axios.get("http://localhost:3001/api/users/getAll", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching users:", error);
+  }
+};
+
+export const deleteUserRequest = async (userId) => {
+  try {
+    await axios.delete(`http://localhost:3001/api/users/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+		alert("user is succsesfully deleted")
+  } catch (error) {
+    console.error("Error deleting user:", error);
+  }
 };

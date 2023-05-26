@@ -42,7 +42,11 @@ const AllCoursesPage = () => {
       .map((item, index) => (
         <Col key={index} sm={6} md={4} lg={3}>
           <Card className="mb-4 mt-4 shadow-sm">
-            <Card.Img variant="top" src={courseBg} />
+            <Card.Img
+              variant="top"
+              src={courseBg}
+              style={{ backgroundImage: "linear-gradient(lightgreen, grey)" }}
+            />
             <Card.Body>
               <Card.Title>{item.title}</Card.Title>
               <Card.Text>{item.category}</Card.Text>

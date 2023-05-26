@@ -72,6 +72,7 @@ export const Course = styled.div`
   padding-top: 10px;
   padding-left: 10px;
   padding: 10px;
+	max-width: 310px;
 `;
 
 export const CourseTitle = styled.div`

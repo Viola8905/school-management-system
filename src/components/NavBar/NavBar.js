@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { Link } from "react-router-dom";
 import { logout } from "../../reducers/userReducer";
+import { Button } from "react-bootstrap";
 
 const NavBar = () => {
   const isAuth = useSelector((state) => state.user.isAuth);
@@ -39,23 +40,59 @@ const NavBar = () => {
               );
             })}
             {role === "admin" && (
-              <div style={{ margin: "5px 20px" }}>
-                <Link to={`/create-course`} style={{ color: "black" }}>
-                  Створити курс
-                </Link>
-              </div>
+              <>
+                <div style={{ margin: "5px 20px" }}>
+                  <Link to={`/create-course`} style={{ color: "black" }}>
+                    Створити курс
+                  </Link>
+                </div>
+                <div style={{ margin: "5px 20px" }}>
+                  <Link to={`/courses-applications`} style={{ color: "black" }}>
+                    Заявки на курси
+                  </Link>
+                </div>
+                <div style={{ margin: "5px 20px" }}>
+                  <Link to={`/users`} style={{ color: "black" }}>
+                    Користувачі
+                  </Link>
+                </div>
+                <div style={{ margin: "5px 20px" }}>
+                  <Button variant="warning"> Адмін</Button>
+                </div>
+              </>
+            )}
+            {role === "user" && (
+              <>
+                <div style={{ margin: "5px 20px" }}>
+                  <Link to={`/my-courses`} style={{ color: "black" }}>
+                    Мої заявки на курси
+                  </Link>
+                </div>
+                <div style={{ margin: "5px 20px" }}>
+                  <Button variant="info">Студент</Button>
+                </div>
+              </>
+            )}
+            {role === "teacher" && (
+              <>
+                <div style={{ margin: "0px 20px" }}>
+                  <Button variant="info">Викладач</Button>
+                </div>
+              </>
             )}
             {isAuth ? (
-              <div
-                style={{ margin: "5px 20px" }}
-                onClick={() => {
-                  dispatch(logout());
-                }}
-              >
-                <Link to={`/`} style={{ color: "black" }}>
-                  Log out
-                </Link>
-              </div>
+              <>
+                <div
+                  style={{ margin: "5px 20px" }}
+                  onClick={() => {
+                    dispatch(logout());
+                  }}
+                >
+                  <Link to={`/`} style={{ color: "black" }}>
+                    Log out
+                  </Link>
+                </div>
+              </>
             ) : (
               <div style={{ margin: "5px 20px" }}>
                 <Link to={`/login`} style={{ color: "black" }}>

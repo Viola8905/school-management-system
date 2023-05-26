@@ -11,11 +11,17 @@ import {
   Wrapper,
 } from "./SingleCoursePage.styles";
 import { Button } from "react-bootstrap";
-import { getAllCoursesRequest } from "../../apiCalls/coursesRequests";
+import {
+  createCourseApplicationRequest,
+  getAllCoursesRequest,
+} from "../../apiCalls/coursesRequests";
+import { useSelector } from "react-redux";
 
 const SingleCoursePage = () => {
   const courseId = useParams().id;
   const [course, setCourse] = React.useState([]);
+  const currentUser = useSelector((state) => state.user.currentUser);
+  console.log(course);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,6 +36,11 @@ const SingleCoursePage = () => {
     fetchData();
   }, []);
 
+  const createCourseApplicationHandler = async (requestData) => {
+    const createCourse = createCourseApplicationRequest(requestData);
+    await createCourse(requestData);
+  };
+
   return (
     <div>
       <Wrapper>
@@ -38,9 +49,24 @@ const SingleCoursePage = () => {
             <Title>{course.title}</Title>
             <Subtitle>{course.description}</Subtitle>
             <div style={{ padding: "20px 0" }}>
-              <Button variant="primary" size="lg">
-                Записатися на курс
+              <Button
+                variant="primary"
+                size="lg"
+                onClick={() =>
+                  createCourseApplicationHandler({
+                    applicantId: currentUser.id,
+                    courseId: course._id,
+                  })
+                }
+              >
+                Подати заявку на курс
               </Button>
+              {course.students &&
+                course.students
+                  .filter((item) => item === currentUser.id)
+                  .map((item) => {
+                    item && <div>Користувач записаний на курс</div>;
+                  })}
             </div>
           </Section>
         </HeroBackground>

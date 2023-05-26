@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { Button, Card, Container, Form, Row } from "react-bootstrap";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import axios from "axios";
 import { login, registration } from "../../apiCalls/userRequests";
-//import BackBtn from "../../components/backBtn/BackBtn";
 
 const AuthPage = () => {
   const location = useLocation();
@@ -15,10 +13,17 @@ const AuthPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const loginHandler = () => {
+    const responce = dispatch(login(email, password));
+    if (responce) {
+      navigate("/");
+    }
+  };
 
   return (
     <>
-      {/* <BackBtn /> */}
       <Container
         className="d-flex justify-content-center align-items-center "
         style={{ height: window.innerHeight - 54 }}
@@ -112,15 +117,10 @@ const AuthPage = () => {
               >
                 <Button
                   variant="primary"
-                  onClick={() => dispatch(login(email, password))}
+                  onClick={loginHandler}
                   style={{ marginTop: "20px" }}
                 >
-                  <NavLink
-                    to="/"
-                    style={{ color: "white", textDecoration: "none" }}
-                  >
-                    Увійти
-                  </NavLink>
+                  Увійти
                 </Button>
               </div>
             ) : (
