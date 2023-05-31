@@ -3,7 +3,7 @@ import {
   approveCourseApplicationRequest,
   coursesApplicationsRequest,
   getAllCoursesRequest,
-	rejectCourseApplicationRequest,
+  rejectCourseApplicationRequest,
 } from "../../../apiCalls/coursesRequests";
 import { Button, Card, Col, Container, Nav, Row } from "react-bootstrap";
 import { getAllUsersRequest } from "../../../apiCalls/userRequests";
@@ -18,16 +18,28 @@ const CoursesApplicationsPage = () => {
     setActiveKey(selectedKey);
   };
 
-  useEffect(() => {
-    const fetchAllApplications = async () => {
-      try {
-        const response = await coursesApplicationsRequest();
-        setApplications(response);
-      } catch (error) {
-        console.error("Error fetching courses:", error);
-      }
-    };
+  const fetchAllApplications = async () => {
+    try {
+      const response = await coursesApplicationsRequest();
+      setApplications(response);
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+    }
+  };
 
+  const handleAppliationReject = async (applicationId) => {
+    const response = await rejectCourseApplicationRequest(applicationId);
+
+    await fetchAllApplications();
+  };
+
+  const handleAppliationApprove = async (applicationId) => {
+    const response = await approveCourseApplicationRequest(applicationId);
+
+    await fetchAllApplications();
+  };
+
+  useEffect(() => {
     const fetchAllCourses = async () => {
       try {
         const response = await getAllCoursesRequest();
@@ -50,7 +62,7 @@ const CoursesApplicationsPage = () => {
     fetchAllUsers();
   }, []);
 
-  useEffect(() => {}, []);
+  useEffect(() => {}, [applications]);
 
   const statuses = [
     { value: "0", label: "На розгляді" },
@@ -94,17 +106,15 @@ const CoursesApplicationsPage = () => {
                     <>
                       <div
                         style={{ margin: " 0 0 10px 0" }}
-                        onClick={() =>
-                          approveCourseApplicationRequest(application._id)
-                        }
+                        onClick={() => handleAppliationApprove(application._id)}
                       >
                         <Button variant="success">Прийняти</Button>
                       </div>
                       <Button
                         variant="danger"
-                        onClick={() =>
-                          rejectCourseApplicationRequest(application._id)
-                        }
+                        onClick={() => {
+                          handleAppliationReject(application._id);
+                        }}
                       >
                         Відхилити
                       </Button>
