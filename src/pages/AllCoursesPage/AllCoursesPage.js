@@ -48,7 +48,15 @@ const AllCoursesPage = () => {
               style={{ backgroundImage: "linear-gradient(lightgreen, grey)" }}
             />
             <Card.Body>
-              <Card.Title>{item.title}</Card.Title>
+              <Card.Title
+                style={{
+                  overflow: "hidden",
+                  whiteSpace: "nowrap",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                {item.title}
+              </Card.Title>
               <Card.Text>{item.category}</Card.Text>
               <Link to={`/courses/${item._id}`}>
                 <Button variant="success">Переглянути</Button>

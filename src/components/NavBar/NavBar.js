@@ -75,8 +75,13 @@ const NavBar = () => {
             )}
             {role === "teacher" && (
               <>
+                <div style={{ margin: "5px 20px" }}>
+                  <Link to={`/teacher-profile`} style={{ color: "black" }}>
+                    Профіль викладача
+                  </Link>
+                </div>
                 <div style={{ margin: "0px 20px" }}>
-                  <Button variant="info">Викладач</Button>
+                  <Button variant="secondary">Викладач</Button>
                 </div>
               </>
             )}

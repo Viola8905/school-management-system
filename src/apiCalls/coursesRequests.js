@@ -82,3 +82,41 @@ export const coursesApplicationsRequest = async () => {
     throw error;
   }
 };
+
+export const approveCourseApplicationRequest = async (applicationId) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:3001/api/courseApplication/${applicationId}/approve`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    alert(error);
+    throw error;
+  }
+};
+
+export const rejectCourseApplicationRequest = async (applicationId) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:3001/api/courseApplication/${applicationId}/reject`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    alert(error);
+    throw error;
+  }
+};

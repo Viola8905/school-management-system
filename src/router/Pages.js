@@ -12,6 +12,7 @@ import EditCoursePage from "../pages/AdminRightsPages/EditCoursePage/EditCourseP
 import AllUsersPage from "../pages/AdminRightsPages/AllUsersPage/AllUsersPage";
 import MyCoursesPage from "../pages/MyCoursesPage/MyCoursesPage";
 import CoursesApplicationsPage from "../pages/AdminRightsPages/CoursesApplicationsPage/CoursesApplicationsPage";
+import TeacherProfilePage from "../pages/TeacherProfilePage/TeacherProfilePage";
 
 const Pages = () => {
   const isAuth = useSelector((state) => state.user.isAuth);
@@ -51,6 +52,15 @@ const Pages = () => {
           <Route path="/all-courses" element={<AllCoursesPage />} />
           <Route path="/courses/:id" element={<SingleCoursePage />} />
           <Route path="/my-courses" element={<MyCoursesPage />} />
+        </Route>
+      );
+    } else if (isAuth && role === "teacher") {
+      return (
+        <Route exact path="/" element={<Dashboard />}>
+          <Route index element={<StartPage />} />
+          <Route path="/all-courses" element={<AllCoursesPage />} />
+          <Route path="/courses/:id" element={<SingleCoursePage />} />
+          <Route path="/teacher-profile" element={<TeacherProfilePage />} />
         </Route>
       );
     }

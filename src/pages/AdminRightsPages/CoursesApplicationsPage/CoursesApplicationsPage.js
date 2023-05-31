@@ -1,17 +1,25 @@
 import React, { useEffect } from "react";
-import { coursesApplicationsRequest } from "../../../apiCalls/coursesRequests";
-import { Card, Col, Container, Nav, Row } from "react-bootstrap";
+import {
+  approveCourseApplicationRequest,
+  coursesApplicationsRequest,
+  getAllCoursesRequest,
+	rejectCourseApplicationRequest,
+} from "../../../apiCalls/coursesRequests";
+import { Button, Card, Col, Container, Nav, Row } from "react-bootstrap";
+import { getAllUsersRequest } from "../../../apiCalls/userRequests";
 
 const CoursesApplicationsPage = () => {
   const [activeKey, setActiveKey] = React.useState("0");
   const [applications, setApplications] = React.useState([]);
+  const [courses, setCourses] = React.useState([]);
+  const [users, setUsers] = React.useState([]);
 
   const handleSelect = (selectedKey) => {
     setActiveKey(selectedKey);
   };
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchAllApplications = async () => {
       try {
         const response = await coursesApplicationsRequest();
         setApplications(response);
@@ -20,9 +28,29 @@ const CoursesApplicationsPage = () => {
       }
     };
 
-    fetchData();
+    const fetchAllCourses = async () => {
+      try {
+        const response = await getAllCoursesRequest();
 
+        setCourses(response);
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      }
+    };
+
+    const fetchAllUsers = async () => {
+      const data = await getAllUsersRequest();
+      setUsers(data);
+    };
+
+    fetchAllApplications();
+
+    fetchAllCourses();
+
+    fetchAllUsers();
   }, []);
+
+  useEffect(() => {}, []);
 
   const statuses = [
     { value: "0", label: "На розгляді" },
@@ -33,9 +61,58 @@ const CoursesApplicationsPage = () => {
   const renderCourseList = () => {
     return applications
       .filter((application) => application.status.toString() === activeKey)
-      .map((item, index) => (
+      .map((application, index) => (
         <Col key={index} sm={6} md={4} lg={3}>
-          <Card className="mb-4 mt-4 shadow-sm">{item._id}</Card>
+          {courses
+            .filter((course) => course._id === application.courseId)
+            .map((course) => (
+              <Card className="mb-4 mt-4 shadow-sm">
+                <Card.Body>
+                  <Card.Text>Назва курсу:</Card.Text>
+                  <Card.Title
+                    style={{
+                      overflow: "hidden",
+                      whiteSpace: "nowrap",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    {course.title}
+                  </Card.Title>
+
+                  {users
+                    .filter((user) => user._id === application.applicantId)
+                    .map((user) => (
+                      <>
+                        <Card.Text>Аплікант:</Card.Text>
+                        <Card.Title>
+                          {user.name}
+                          {user.surname}
+                        </Card.Title>
+                      </>
+                    ))}
+                  {application.status === 0 && (
+                    <>
+                      <div
+                        style={{ margin: " 0 0 10px 0" }}
+                        onClick={() =>
+                          approveCourseApplicationRequest(application._id)
+                        }
+                      >
+                        <Button variant="success">Прийняти</Button>
+                      </div>
+                      <Button
+                        variant="danger"
+                        onClick={() =>
+                          rejectCourseApplicationRequest(application._id)
+                        }
+                      >
+                        Відхилити
+                      </Button>
+                    </>
+                  )}
+                </Card.Body>
+              </Card>
+            ))}
         </Col>
       ));
   };

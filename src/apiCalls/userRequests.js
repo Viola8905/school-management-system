@@ -54,7 +54,7 @@ export const login = (email, password) => {
       } else {
         dispatch(setAdmin(decodedToken));
       }
-			return response.data.token
+      return response.data.token;
     } catch (e) {
       localStorage.removeItem("token");
       alert(e.response.data.message);
@@ -75,6 +75,19 @@ export const getAllUsersRequest = async () => {
   }
 };
 
+export const getUserByEmailRequest = async (email) => {
+  try {
+    const response = await axios.get(`http://localhost:3001/api/users/${email}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching users:", error);
+  }
+};
+
 export const deleteUserRequest = async (userId) => {
   try {
     await axios.delete(`http://localhost:3001/api/users/${userId}`, {
@@ -82,8 +95,34 @@ export const deleteUserRequest = async (userId) => {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
-		alert("user is succsesfully deleted")
+    alert("user is succsesfully deleted");
   } catch (error) {
     console.error("Error deleting user:", error);
   }
+};
+
+export const editTeacherProfileRequest = (teacher) => {
+  return async () => {
+    axios
+      .patch(`http://localhost:3001/api/users/${teacher._id}`, teacher, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => alert("Профіль успішно оновлено"))
+      .catch((err) => alert(err));
+  };
+};
+
+export const editTeacherProfileAvatarRequest = (teacher) => {
+  return async () => {
+    axios
+      .patch(`http://localhost:3001/api/users/${teacher._id}`, teacher, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => alert("Профіль успішно оновлено"))
+      .catch((err) => alert(err));
+  };
 };
