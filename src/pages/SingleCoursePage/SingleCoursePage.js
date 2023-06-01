@@ -14,6 +14,7 @@ import { Button } from "react-bootstrap";
 import {
   createCourseApplicationRequest,
   getAllCoursesRequest,
+  getUserCoursesApplicationsRequest,
 } from "../../apiCalls/coursesRequests";
 import { useSelector } from "react-redux";
 
@@ -21,7 +22,7 @@ const SingleCoursePage = () => {
   const courseId = useParams().id;
   const [course, setCourse] = React.useState([]);
   const currentUser = useSelector((state) => state.user.currentUser);
-  console.log(course);
+  const [application, setApplication] = React.useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,9 +37,20 @@ const SingleCoursePage = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const fetchApplications = async () => {
+      const data = await getUserCoursesApplicationsRequest(currentUser.id);
+      const courseApplication = data.find((item) => item.courseId === courseId);
+
+      setApplication(courseApplication);
+    };
+    fetchApplications();
+  }, []);
+
   const createCourseApplicationHandler = async (requestData) => {
     const createCourse = createCourseApplicationRequest(requestData);
     await createCourse(requestData);
+    setApplication({ status: 0 });
   };
 
   return (
@@ -49,24 +61,32 @@ const SingleCoursePage = () => {
             <Title>{course.title}</Title>
             <Subtitle>{course.description}</Subtitle>
             <div style={{ padding: "20px 0" }}>
-              <Button
-                variant="primary"
-                size="lg"
-                onClick={() =>
-                  createCourseApplicationHandler({
-                    applicantId: currentUser.id,
-                    courseId: course._id,
-                  })
-                }
-              >
-                Подати заявку на курс
-              </Button>
-              {course.students &&
-                course.students
-                  .filter((item) => item === currentUser.id)
-                  .map((item) => {
-                    item && <div>Користувач записаний на курс</div>;
-                  })}
+              {application?.status === 0 ? (
+                <Button variant="info" size="lg">
+                  Заявка на курс на розгляді
+                </Button>
+              ) : application?.status === 1 ? (
+                <Button variant="success" size="lg">
+                  Заявку на курс прийнято
+                </Button>
+              ) : application?.status === 2 ? (
+                <Button variant="danger" size="lg">
+                  Заявка на курс відхилена
+                </Button>
+              ) : (
+                <Button
+                  variant="primary"
+                  size="lg"
+                  onClick={() =>
+                    createCourseApplicationHandler({
+                      applicantId: currentUser.id,
+                      courseId: course._id,
+                    })
+                  }
+                >
+                  Подати заявку
+                </Button>
+              )}
             </div>
           </Section>
         </HeroBackground>

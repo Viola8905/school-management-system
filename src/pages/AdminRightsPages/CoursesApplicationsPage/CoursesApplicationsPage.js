@@ -5,7 +5,7 @@ import {
   getAllCoursesRequest,
   rejectCourseApplicationRequest,
 } from "../../../apiCalls/coursesRequests";
-import { Button, Card, Col, Container, Nav, Row } from "react-bootstrap";
+import { Alert, Button, Card, Col, Container, Nav, Row } from "react-bootstrap";
 import { getAllUsersRequest } from "../../../apiCalls/userRequests";
 
 const CoursesApplicationsPage = () => {
@@ -62,8 +62,6 @@ const CoursesApplicationsPage = () => {
     fetchAllUsers();
   }, []);
 
-  useEffect(() => {}, [applications]);
-
   const statuses = [
     { value: "0", label: "На розгляді" },
     { value: "1", label: "Прийняті" },
@@ -71,9 +69,11 @@ const CoursesApplicationsPage = () => {
   ];
 
   const renderCourseList = () => {
-    return applications
-      .filter((application) => application.status.toString() === activeKey)
-      .map((application, index) => (
+    const coursesApplications = applications.filter(
+      (application) => application.status.toString() === activeKey
+    );
+    if (coursesApplications.length > 0) {
+      return coursesApplications.map((application, index) => (
         <Col key={index} sm={6} md={4} lg={3}>
           {courses
             .filter((course) => course._id === application.courseId)
@@ -125,6 +125,19 @@ const CoursesApplicationsPage = () => {
             ))}
         </Col>
       ));
+    } else {
+			return (
+        <Container className="d-flex h-100">
+          <Row className="justify-content-center align-self-center w-100">
+            <Col xs={12} md={6}>
+              <Alert variant="info" className="text-center">
+                Немає записів
+              </Alert>
+            </Col>
+          </Row>
+        </Container>
+      );
+    }
   };
   return (
     <Container style={{ padding: "20px" }}>

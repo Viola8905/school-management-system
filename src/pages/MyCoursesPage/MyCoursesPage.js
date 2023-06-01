@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Card, Col, Container, Nav, Row } from "react-bootstrap";
+import { Alert, Button, Card, Col, Container, Nav, Row } from "react-bootstrap";
 import {
   getAllCoursesRequest,
   getUserCoursesApplicationsRequest,
@@ -13,11 +13,11 @@ const MyCoursesPage = () => {
   const [applications, setApplications] = useState([]);
   const [courses, setCourses] = useState([]);
   const userId = useSelector((state) => state.user.currentUser.id);
-	const statuses = [
-		{ value: "0", label: "На розгляді" },
-		{ value: "1", label: "Прийнято" },
-		{ value: "2", label: "Відхилено" },
-	];
+  const statuses = [
+    { value: "0", label: "На розгляді" },
+    { value: "1", label: "Прийнято" },
+    { value: "2", label: "Відхилено" },
+  ];
 
   useEffect(() => {
     if (userId) {
@@ -40,15 +40,16 @@ const MyCoursesPage = () => {
     }
   }, [userId]);
 
-
   const handleSelect = (selectedStatus) => {
     setActiveStatus(selectedStatus);
   };
 
   const renderApplicationsList = () => {
-    return applications
-      .filter((application) => application.status.toString() === activeStatus)
-      .map((application, index) => (
+    const coursesApplications = applications.filter(
+      (application) => application.status.toString() === activeStatus
+    );
+    if (coursesApplications.length > 0) {
+      return coursesApplications.map((application, index) => (
         <>
           {courses
             .filter((course) => course._id === application.courseId)
@@ -58,10 +59,20 @@ const MyCoursesPage = () => {
                   <Card.Img
                     variant="top"
                     src={courseBg}
-                    style={{ backgroundImage: "linear-gradient(lightgreen, grey)" }}
+                    style={{
+                      backgroundImage: "linear-gradient(lightgreen, grey)",
+                    }}
                   />
                   <Card.Body>
-                    <Card.Title>{course.title}</Card.Title>
+                    <Card.Title
+                      style={{
+                        overflow: "hidden",
+                        whiteSpace: "nowrap",
+                        textOverflow: "ellipsis",
+                      }}
+                    >
+                      {course.title}
+                    </Card.Title>
                     <Card.Text>{course.category}</Card.Text>
                     <Link to={`/courses/${course._id}`}>
                       <Button variant="success">Переглянути</Button>
@@ -72,6 +83,19 @@ const MyCoursesPage = () => {
             ))}
         </>
       ));
+    } else {
+      return (
+        <Container className="d-flex h-100">
+          <Row className="justify-content-center align-self-center w-100">
+            <Col xs={12} md={6}>
+              <Alert variant="info" className="text-center">
+                Немає записів
+              </Alert>
+            </Col>
+          </Row>
+        </Container>
+      );
+    }
   };
   return (
     <Container style={{ padding: "20px" }}>

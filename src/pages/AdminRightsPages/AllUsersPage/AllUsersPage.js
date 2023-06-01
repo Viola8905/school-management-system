@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Nav, Container, Row, Col, Card, Button } from "react-bootstrap";
+import { Nav, Container, Row, Col, Card, Button, Alert } from "react-bootstrap";
 import {
   deleteUserRequest,
   getAllUsersRequest,
@@ -29,28 +29,39 @@ const AllUsersPage = () => {
   const roles = ["user", "admin", "teacher"];
 
   const renderUserList = () => {
-    if (users) {
-      return users
-        .filter((user) => user.role === activeRole)
-        .map((user, index) => (
-          <Col key={index} sm={6} md={4} lg={3}>
-            <Card className="mb-4 mt-4 shadow-sm">
-              <Card.Body>
-                <Card.Title>
-                  {user.name} {user.surname}
-                </Card.Title>
-                <Card.Text>роль: {user.role}</Card.Text>
-                <Button
-                  variant="danger"
-                  onClick={() => handleDelete(user._id)}
-                  style={{ marginLeft: "10px" }}
-                >
-                  Видалити користувача
-                </Button>
-              </Card.Body>
-            </Card>
-          </Col>
-        ));
+    const allUsers = users.filter((user) => user.role === activeRole);
+    if (allUsers.length > 0) {
+      return allUsers.map((user, index) => (
+        <Col key={index} sm={6} md={4} lg={3}>
+          <Card className="mb-4 mt-4 shadow-sm">
+            <Card.Body>
+              <Card.Title>
+                {user.name} {user.surname}
+              </Card.Title>
+              <Card.Text>роль: {user.role}</Card.Text>
+              <Button
+                variant="danger"
+                onClick={() => handleDelete(user._id)}
+                style={{ marginLeft: "10px" }}
+              >
+                Видалити користувача
+              </Button>
+            </Card.Body>
+          </Card>
+        </Col>
+      ));
+    } else {
+      return (
+        <Container className="d-flex h-100">
+          <Row className="justify-content-center align-self-center w-100">
+            <Col xs={12} md={6}>
+              <Alert variant="info" className="text-center">
+                Немає записів
+              </Alert>
+            </Col>
+          </Row>
+        </Container>
+      );
     }
   };
 
