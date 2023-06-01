@@ -65,36 +65,37 @@ const SingleCoursePage = () => {
             <Title>{course.title}</Title>
             <Subtitle>{course.description}</Subtitle>
             <div style={{ padding: "20px 0" }}>
-              {application?.status === 0 ? (
-                <Button variant="info" size="lg">
-                  Заявка на розгляді
-                </Button>
-              ) : application?.status === 1 ? (
-                <Button variant="success" size="lg">
-                  Заявку на курс прийнято
-                </Button>
-              ) : application?.status === 2 ? (
-                <Button variant="danger" size="lg">
-                  Заявка на курс відхилена
-                </Button>
-              ) : (
-                <Button
-                  variant="primary"
-                  size="lg"
-                  onClick={() => {
-                    if (currentUser.id) {
-                      createCourseApplicationHandler({
-                        applicantId: currentUser.id,
-                        courseId: course._id,
-                      });
-                    } else {
-                      alert("Аби подати заявку на курс пройдіть логінізацію");
-                    }
-                  }}
-                >
-                  Подати заявку
-                </Button>
-              )}
+              {currentUser.role === "user" &&
+                (application?.status === 0 ? (
+                  <Button variant="info" size="lg">
+                    Заявка на розгляді
+                  </Button>
+                ) : application?.status === 1 ? (
+                  <Button variant="success" size="lg">
+                    Заявку на курс прийнято
+                  </Button>
+                ) : application?.status === 2 ? (
+                  <Button variant="danger" size="lg">
+                    Заявка на курс відхилена
+                  </Button>
+                ) : (
+                  <Button
+                    variant="primary"
+                    size="lg"
+                    onClick={() => {
+                      if (currentUser.id) {
+                        createCourseApplicationHandler({
+                          applicantId: currentUser.id,
+                          courseId: course._id,
+                        });
+                      } else {
+                        alert("Аби подати заявку на курс пройдіть логінізацію");
+                      }
+                    }}
+                  >
+                    Подати заявку
+                  </Button>
+                ))}
             </div>
           </Section>
         </HeroBackground>

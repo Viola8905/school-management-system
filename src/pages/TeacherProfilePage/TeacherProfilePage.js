@@ -10,7 +10,7 @@ const TeacherProfilePage = () => {
   const teacherEmail = useSelector((state) => state.user.currentUser.email);
   const [editTeacher, setEditTeacher] = React.useState("");
   const [selectedFile, setSelectedFile] = React.useState(null);
-	const [previewUrl, setPreviewUrl] = React.useState(null);
+  const [previewUrl, setPreviewUrl] = React.useState(null);
 
   const handleInputChange = (event) => {
     setEditTeacher({ ...editTeacher, [event.target.name]: event.target.value });
@@ -28,8 +28,6 @@ const TeacherProfilePage = () => {
 
     fetchTeacherData();
   }, []);
-
- 
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -65,10 +63,15 @@ const TeacherProfilePage = () => {
       console.log("No file selected");
     }
   };
-	var source = `../../../../backend${editTeacher.avatar}`;
-	console.log(source)
+  var source = `../../../../backend${editTeacher.avatar}`;
+
   return (
     <Container>
+      <Row>
+        <Col>
+          <h1 style={{ padding: "20px 0" }}>Редагування данних викладача</h1>
+        </Col>
+      </Row>
       <Col xs={12} md={4}>
         <Form>
           <Form.Group>
@@ -143,10 +146,11 @@ const TeacherProfilePage = () => {
             onChange={handleInputChange}
           />
         </Form.Group>
-
-        <Button variant="primary" type="submit">
-          Update Profile
-        </Button>
+        <div style={{ padding: "20px 0" }}>
+          <Button variant="primary" type="submit">
+            Редагувати Профіль
+          </Button>
+        </div>
       </Form>
     </Container>
   );
