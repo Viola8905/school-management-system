@@ -141,6 +141,11 @@ const CoursesApplicationsPage = () => {
   };
   return (
     <Container style={{ padding: "20px" }}>
+      <Row>
+        <Col>
+          <h1 style={{ padding: "20px 0" }}>Усі заявки на курси </h1>
+        </Col>
+      </Row>
       <Nav variant="pills" defaultActiveKey="0" onSelect={handleSelect}>
         {statuses.map((status) => {
           return (

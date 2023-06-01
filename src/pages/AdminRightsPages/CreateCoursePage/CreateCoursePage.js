@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Form, Button } from "react-bootstrap";
+import { Container, Form, Button, Row, Col } from "react-bootstrap";
 import { createCourseRequest } from "../../../apiCalls/coursesRequests";
 import axios from "axios";
 
@@ -41,6 +41,11 @@ const CreateCoursePage = () => {
 
   return (
     <Container>
+      <Row>
+        <Col>
+          <h1 style={{ padding: "20px 0" }}>Форма створення курсу</h1>
+        </Col>
+      </Row>
       <Form onSubmit={handleSubmit}>
         <Form.Group>
           <Form.Label>Title</Form.Label>

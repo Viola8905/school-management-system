@@ -38,13 +38,17 @@ const SingleCoursePage = () => {
   }, []);
 
   useEffect(() => {
-    const fetchApplications = async () => {
-      const data = await getUserCoursesApplicationsRequest(currentUser.id);
-      const courseApplication = data.find((item) => item.courseId === courseId);
+    if (currentUser.id) {
+      const fetchApplications = async () => {
+        const data = await getUserCoursesApplicationsRequest(currentUser.id);
+        const courseApplication = data.find(
+          (item) => item.courseId === courseId
+        );
 
-      setApplication(courseApplication);
-    };
-    fetchApplications();
+        setApplication(courseApplication);
+      };
+      fetchApplications();
+    }
   }, []);
 
   const createCourseApplicationHandler = async (requestData) => {
@@ -63,7 +67,7 @@ const SingleCoursePage = () => {
             <div style={{ padding: "20px 0" }}>
               {application?.status === 0 ? (
                 <Button variant="info" size="lg">
-                  Заявка на курс на розгляді
+                  Заявка на розгляді
                 </Button>
               ) : application?.status === 1 ? (
                 <Button variant="success" size="lg">
@@ -77,12 +81,16 @@ const SingleCoursePage = () => {
                 <Button
                   variant="primary"
                   size="lg"
-                  onClick={() =>
-                    createCourseApplicationHandler({
-                      applicantId: currentUser.id,
-                      courseId: course._id,
-                    })
-                  }
+                  onClick={() => {
+                    if (currentUser.id) {
+                      createCourseApplicationHandler({
+                        applicantId: currentUser.id,
+                        courseId: course._id,
+                      });
+                    } else {
+                      alert("Аби подати заявку на курс пройдіть логінізацію");
+                    }
+                  }}
                 >
                   Подати заявку
                 </Button>

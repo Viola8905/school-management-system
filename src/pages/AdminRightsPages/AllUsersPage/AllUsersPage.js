@@ -67,6 +67,11 @@ const AllUsersPage = () => {
 
   return (
     <Container style={{ padding: "20px" }}>
+      <Row>
+        <Col>
+          <h1 style={{ padding: "20px 0" }}>Усі користувачі</h1>
+        </Col>
+      </Row>
       <Nav variant="pills" defaultActiveKey="user" onSelect={handleSelect}>
         {roles.map((role) => {
           return (

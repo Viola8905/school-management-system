@@ -63,7 +63,7 @@ const AuthPage = () => {
                 />
                 <Form.Control
                   className="mt-2"
-                  placeholder="По-батькові"
+                  placeholder="Призвіще"
                   value={middle_name}
                   onChange={(e) => {
                     setMiddle_name(e.target.value);
