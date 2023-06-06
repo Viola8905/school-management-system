@@ -10,17 +10,14 @@ const TeacherProfilePage = () => {
   const teacherEmail = useSelector((state) => state.user.currentUser.email);
   const [editTeacher, setEditTeacher] = React.useState("");
   const [selectedFile, setSelectedFile] = React.useState(null);
-  const [previewUrl, setPreviewUrl] = React.useState(null);
-
-  const handleInputChange = (event) => {
-    setEditTeacher({ ...editTeacher, [event.target.name]: event.target.value });
-  };
+  const [previewUrl, setPreviewUrl] = React.useState("");
 
   useEffect(() => {
     const fetchTeacherData = async () => {
       try {
         const response = await getUserByEmailRequest(teacherEmail);
         setEditTeacher(response);
+        setPreviewUrl(`http://localhost:3001/${response.avatar}`);
       } catch (error) {
         console.error("Error fetching courses:", error);
       }
@@ -28,6 +25,10 @@ const TeacherProfilePage = () => {
 
     fetchTeacherData();
   }, []);
+
+  const handleInputChange = (event) => {
+    setEditTeacher({ ...editTeacher, [event.target.name]: event.target.value });
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -37,8 +38,6 @@ const TeacherProfilePage = () => {
 
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);
-
-    // Generate a URL for the selected file for previewing
     setPreviewUrl(URL.createObjectURL(e.target.files[0]));
   };
 
@@ -57,13 +56,12 @@ const TeacherProfilePage = () => {
       };
 
       fetch("http://localhost:3001/api/users/uploadAvatar", requestOptions)
-        .then((response) => response.text())
+        .then(() => alert("аватар викладача успішно оновлено"))
         .catch((error) => console.log("error", error));
     } else {
-      console.log("No file selected");
+      alert("No file selected");
     }
   };
-  var source = `../../../../backend${editTeacher.avatar}`;
 
   return (
     <Container>
@@ -74,41 +72,29 @@ const TeacherProfilePage = () => {
       </Row>
       <Col xs={12} md={4}>
         <Form>
-          <Form.Group>
-            <Form.Label>Upload Image</Form.Label>
-            <Form.Control type="file" onChange={handleFileChange} />
-            {/* {previewUrl && ( */}
-            {/* <img
-              src={source}
-             
+          <Form.Label>Аватар викладача</Form.Label>
+          {previewUrl && (
+            <Image
+              src={previewUrl}
               style={{ maxWidth: "100%", height: "auto" }}
-            /> */}
-            {/* )} */}
+            />
+          )}
+          <Form.Group>
+            <Form.Control type="file" onChange={handleFileChange} />
           </Form.Group>
-          <Button variant="primary" onClick={uploadImage}>
-            Upload
+          <Button
+            variant="primary"
+            onClick={uploadImage}
+            style={{ margin: "20px 0" }}
+          >
+            Редагувати аватар викладача
           </Button>
         </Form>
-
-        {/*
-        <Form>
-          <Form.Group>
-            <Form.Control
-              type="file"
-              id="avatarFile"
-              label="Change Avatar"
-              onChange={handleAvatarChange}
-            />
-          </Form.Group>
-          <Button variant="primary" type="submit">
-            Save Changes
-          </Button>
-        </Form> */}
       </Col>
 
       <Form onSubmit={handleSubmit}>
         <Form.Group>
-          <Form.Label>Name</Form.Label>
+          <Form.Label>Ім'я</Form.Label>
           <Form.Control
             type="text"
             name="name"
@@ -118,7 +104,7 @@ const TeacherProfilePage = () => {
         </Form.Group>
 
         <Form.Group>
-          <Form.Label>Surname</Form.Label>
+          <Form.Label>Призвіще</Form.Label>
           <Form.Control
             type="text"
             name="surname"
@@ -128,17 +114,7 @@ const TeacherProfilePage = () => {
         </Form.Group>
 
         <Form.Group>
-          <Form.Label>Email</Form.Label>
-          <Form.Control
-            type="email"
-            name="email"
-            value={editTeacher.email}
-            onChange={handleInputChange}
-          />
-        </Form.Group>
-
-        <Form.Group>
-          <Form.Label>Description</Form.Label>
+          <Form.Label>Опис</Form.Label>
           <Form.Control
             as="textarea"
             name="description"
@@ -148,7 +124,7 @@ const TeacherProfilePage = () => {
         </Form.Group>
         <div style={{ padding: "20px 0" }}>
           <Button variant="primary" type="submit">
-            Редагувати Профіль
+            Редагувати текстові дані викладача
           </Button>
         </div>
       </Form>
