@@ -42,8 +42,10 @@ const StartPage = () => {
       <Wrapper>
         <HeroBackground>
           <Section>
-            <Title>IT Academy</Title>
-            <Subtitle>Якісне навчання для дорослих та дітей</Subtitle>
+            <Subtitle style={{ color: "black" }}>
+              Інформаційно-довідкова система школи "Юний програміст"
+            </Subtitle>
+            <Subtitle>Якісне навчання для молоді та дітей</Subtitle>
           </Section>
         </HeroBackground>
       </Wrapper>

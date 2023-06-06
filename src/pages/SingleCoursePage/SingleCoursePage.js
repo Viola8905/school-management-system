@@ -10,7 +10,7 @@ import {
   Title,
   Wrapper,
 } from "./SingleCoursePage.styles";
-import { Button } from "react-bootstrap";
+import { Button} from "react-bootstrap";
 import {
   createCourseApplicationRequest,
   getAllCoursesRequest,
@@ -57,13 +57,29 @@ const SingleCoursePage = () => {
     setApplication({ status: 0 });
   };
 
+  function formatDate(isoDateString) {
+    const date = new Date(isoDateString);
+
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0"); //January is 0!
+    const year = date.getFullYear();
+
+    return `${day}/${month}/${year}`;
+  }
+  console.log(course);
+
   return (
     <div>
       <Wrapper>
         <HeroBackground>
           <Section>
+						<p>Курс</p>
             <Title>{course.title}</Title>
             <Subtitle>{course.description}</Subtitle>
+            <p>
+              Дата проведення: {formatDate(course.startDate)} -{" "}
+              {formatDate(course.endDate)}
+            </p>
             <div style={{ padding: "20px 0" }}>
               {currentUser.role === "user" &&
                 (application?.status === 0 ? (
@@ -79,23 +95,26 @@ const SingleCoursePage = () => {
                     Заявка на курс відхилена
                   </Button>
                 ) : (
-                  <Button
-                    variant="primary"
-                    size="lg"
-                    onClick={() => {
-                      if (currentUser.id) {
-                        createCourseApplicationHandler({
-                          applicantId: currentUser.id,
-                          courseId: course._id,
-                        });
-                      } else {
-                        alert("Аби подати заявку на курс пройдіть логінізацію");
-                      }
-                    }}
-                  >
-                    Подати заявку
-                  </Button>
+                  <div></div>
                 ))}
+              
+              <Button
+                variant="primary"
+                size="lg"
+                onClick={() => {
+                  if (currentUser.id) {
+                    createCourseApplicationHandler({
+                      applicantId: currentUser.id,
+                      courseId: course._id,
+                    });
+                  } else {
+                    alert("Аби подати заявку на курс пройдіть логінізацію");
+                  }
+                }}
+              >
+                Подати заявку
+              </Button>
+              
             </div>
           </Section>
         </HeroBackground>

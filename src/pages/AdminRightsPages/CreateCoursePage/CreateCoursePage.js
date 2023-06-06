@@ -48,12 +48,12 @@ const CreateCoursePage = () => {
       </Row>
       <Form onSubmit={handleSubmit}>
         <Form.Group>
-          <Form.Label>Title</Form.Label>
+          <Form.Label>Заголовок</Form.Label>
           <Form.Control type="text" name="title" onChange={handleChange} />
         </Form.Group>
 
         <Form.Group>
-          <Form.Label>Description</Form.Label>
+          <Form.Label>Опис</Form.Label>
           <Form.Control
             type="text"
             name="description"
@@ -62,7 +62,7 @@ const CreateCoursePage = () => {
         </Form.Group>
 
         <Form.Group>
-          <Form.Label>Lector</Form.Label>
+          <Form.Label>Викладач</Form.Label>
           <Form.Control
             as="select"
             name="lector"
@@ -79,12 +79,12 @@ const CreateCoursePage = () => {
         </Form.Group>
 
         <Form.Group>
-          <Form.Label>Category</Form.Label>
+          <Form.Label>Категорія</Form.Label>
           <Form.Control type="text" name="category" onChange={handleChange} />
         </Form.Group>
 
         <Form.Group>
-          <Form.Label>Start Date</Form.Label>
+          <Form.Label>Дата початку</Form.Label>
           <Form.Control
             type="datetime-local"
             name="startDate"
@@ -93,7 +93,7 @@ const CreateCoursePage = () => {
         </Form.Group>
 
         <Form.Group>
-          <Form.Label>End Date</Form.Label>
+          <Form.Label>Дата кінця</Form.Label>
           <Form.Control
             type="datetime-local"
             name="endDate"

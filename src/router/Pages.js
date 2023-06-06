@@ -13,6 +13,7 @@ import AllUsersPage from "../pages/AdminRightsPages/AllUsersPage/AllUsersPage";
 import MyCoursesPage from "../pages/MyCoursesPage/MyCoursesPage";
 import CoursesApplicationsPage from "../pages/AdminRightsPages/CoursesApplicationsPage/CoursesApplicationsPage";
 import TeacherProfilePage from "../pages/TeacherProfilePage/TeacherProfilePage";
+import AboutUsPage from "../pages/AboutUsPage/AboutUsPage";
 
 const Pages = () => {
   const isAuth = useSelector((state) => state.user.isAuth);
@@ -26,6 +27,7 @@ const Pages = () => {
           <Route path="/all-courses" element={<AllCoursesPage />} />
           <Route path="/courses/:id" element={<SingleCoursePage />} />
           <Route path="/login" element={<AuthPage />} />
+          <Route path="/about-us" element={<AboutUsPage />} />
           <Route exact path="/registration" element={<AuthPage />} />
         </Route>
       );
