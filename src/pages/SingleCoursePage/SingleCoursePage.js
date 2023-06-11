@@ -10,25 +10,47 @@ import {
   Title,
   Wrapper,
 } from "./SingleCoursePage.styles";
-import { Button} from "react-bootstrap";
+import { Button, Card } from "react-bootstrap";
 import {
   createCourseApplicationRequest,
   getAllCoursesRequest,
   getUserCoursesApplicationsRequest,
 } from "../../apiCalls/coursesRequests";
 import { useSelector } from "react-redux";
+import axios from "axios";
 
 const SingleCoursePage = () => {
   const courseId = useParams().id;
   const [course, setCourse] = React.useState([]);
   const currentUser = useSelector((state) => state.user.currentUser);
   const [application, setApplication] = React.useState([]);
+  const [courseTeacher, setCourseTeacher] = React.useState([]);
+  const isAuth = useSelector((state) => state.user.isAuth);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await getAllCoursesRequest();
-        setCourse(response.find((item) => item._id === courseId));
+        const course = response.find((item) => item._id === courseId);
+        setCourse(course);
+
+        axios
+          .get(`http://localhost:3001/api/users/getById/${course.lector}`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          })
+          .then((res) => {
+            function correctWebPath(pathString) {
+              return pathString.replace(/\\\\/g, "/").replace(/\\/g, "/");
+            }
+
+            const inputPath = res.data.avatar;
+            const correctedPath = correctWebPath(inputPath);
+            res.data.avatar = correctedPath;
+            setCourseTeacher(res.data);
+          })
+          .catch((err) => alert(err));
       } catch (error) {
         console.error("Error fetching courses:", error);
       }
@@ -66,14 +88,13 @@ const SingleCoursePage = () => {
 
     return `${day}/${month}/${year}`;
   }
-  console.log(course);
 
   return (
     <div>
       <Wrapper>
         <HeroBackground>
           <Section>
-						<p>Курс</p>
+            <p>Курс</p>
             <Title>{course.title}</Title>
             <Subtitle>{course.description}</Subtitle>
             <p>
@@ -95,26 +116,28 @@ const SingleCoursePage = () => {
                     Заявка на курс відхилена
                   </Button>
                 ) : (
-                  <div></div>
+                  <Button
+                    variant="primary"
+                    size="lg"
+                    onClick={() => {
+                      if (currentUser.id) {
+                        createCourseApplicationHandler({
+                          applicantId: currentUser.id,
+                          courseId: course._id,
+                        });
+                      } else {
+                        alert("Аби подати заявку на курс пройдіть логінізацію");
+                      }
+                    }}
+                  >
+                    Подати заявку
+                  </Button>
                 ))}
-              
-              <Button
-                variant="primary"
-                size="lg"
-                onClick={() => {
-                  if (currentUser.id) {
-                    createCourseApplicationHandler({
-                      applicantId: currentUser.id,
-                      courseId: course._id,
-                    });
-                  } else {
-                    alert("Аби подати заявку на курс пройдіть логінізацію");
-                  }
-                }}
-              >
-                Подати заявку
-              </Button>
-              
+              {!isAuth && (
+                <Button variant="info" size="lg">
+                  Залогіньтеся аби подати заявку на курс
+                </Button>
+              )}
             </div>
           </Section>
         </HeroBackground>
@@ -131,6 +154,30 @@ const SingleCoursePage = () => {
           бути затребуваним, високооплачуваним фахівцем.
         </AboutDescription>
       </AboutCourseS>
+
+      <div
+        style={{
+          backgroundColor: "#020120",
+          height: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <AboutTitle>Викладач курсу</AboutTitle>
+        <Card style={{ width: "30rem" }}>
+          <Card.Img
+            variant="top"
+            src={`http://localhost:3001/${courseTeacher.avatar}`}
+          />
+          <Card.Body>
+            <Card.Title>{`${courseTeacher.name} ${courseTeacher.surname}`}</Card.Title>
+            <Card.Text>{courseTeacher.description}</Card.Text>
+          </Card.Body>
+        </Card>
+        s
+      </div>
     </div>
   );
 };

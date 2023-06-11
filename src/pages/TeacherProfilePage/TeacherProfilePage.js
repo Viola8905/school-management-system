@@ -11,6 +11,7 @@ const TeacherProfilePage = () => {
   const [editTeacher, setEditTeacher] = React.useState("");
   const [selectedFile, setSelectedFile] = React.useState(null);
   const [previewUrl, setPreviewUrl] = React.useState("");
+	
 
   useEffect(() => {
     const fetchTeacherData = async () => {

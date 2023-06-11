@@ -49,7 +49,7 @@ export const login = (email, password) => {
 
       let decodedToken = decodeToken(response.data.token);
 
-      if (decodedToken.role == "user") {
+      if (decodedToken.role === "user") {
         dispatch(setStudent(decodedToken));
       } else {
         dispatch(setAdmin(decodedToken));
@@ -82,6 +82,22 @@ export const getUserByEmailRequest = async (email) => {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching users:", error);
+  }
+};
+
+export const getUserByIdRequest = async (userId) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:3001/api/users/getById/${userId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     console.error("Error fetching users:", error);

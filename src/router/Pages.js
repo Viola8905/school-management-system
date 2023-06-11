@@ -40,6 +40,7 @@ const Pages = () => {
           <Route exact path="/create-course" element={<CreateCoursePage />} />
           <Route exact path="/edit-course/:id" element={<EditCoursePage />} />
           <Route exact path="/users" element={<AllUsersPage />} />
+          <Route path="/about-us" element={<AboutUsPage />} />
           <Route
             exact
             path="/courses-applications"
@@ -54,6 +55,7 @@ const Pages = () => {
           <Route path="/all-courses" element={<AllCoursesPage />} />
           <Route path="/courses/:id" element={<SingleCoursePage />} />
           <Route path="/my-courses" element={<MyCoursesPage />} />
+          <Route path="/about-us" element={<AboutUsPage />} />
         </Route>
       );
     } else if (isAuth && role === "teacher") {
@@ -62,6 +64,7 @@ const Pages = () => {
           <Route index element={<StartPage />} />
           <Route path="/all-courses" element={<AllCoursesPage />} />
           <Route path="/courses/:id" element={<SingleCoursePage />} />
+          <Route path="/about-us" element={<AboutUsPage />} />
           <Route path="/teacher-profile" element={<TeacherProfilePage />} />
         </Route>
       );
